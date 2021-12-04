@@ -1,11 +1,12 @@
 {
-    "name": "com.momoma.udon-starter-kit",
-    "displayName": "Udon Starter Kit",
-    "version": "0.0.1",
-    "unity": "2019.4",
-    "description": "A set of useful VRChat Udon prefabs for world creators.",
-    "repository": {
-      "url": "https://github.com/momoma-null/UdonStarterKit.git",
-      "type": "git"
-    }
+  "name": "com.momoma.udon-starter-kit",
+  "displayName": "Udon Starter Kit",
+  "version": "0.0.1",
+  "unity": "2019.4",
+  "description": "A set of useful VRChat Udon prefabs for world creators.",
+  "repository": {
+    "url": "https://github.com/momoma-null/UdonStarterKit.git",
+    "type": "git"
+  },
+  "type": "sample"
 }
