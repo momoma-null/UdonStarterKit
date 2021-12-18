@@ -8,6 +8,7 @@ Shader "MomomaShader/Sprite/MSDF"
 	{
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
+		_BackgroundColor ("Background Color", Color) = (0,0,0,0)
 		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
 		[HideInInspector] _RendererColor ("RendererColor", Color) = (1,1,1,1)
 		[HideInInspector] _Flip ("Flip", Vector) = (1,1,1,1)
@@ -43,6 +44,8 @@ Shader "MomomaShader/Sprite/MSDF"
 
 			#include "UnitySprites.cginc"
 
+			half4 _BackgroundColor;
+
 			inline float median(float r, float g, float b)
 			{
 				return max(min(r, g), min(max(r, g), b));
@@ -53,7 +56,7 @@ Shader "MomomaShader/Sprite/MSDF"
 				float3 sample = tex2D(_MainTex, IN.texcoord);
 				float dist = median(sample.r, sample.g, sample.b) - 0.5;
 				half4 color = IN.color;
-				color.a *= saturate(dist * rsqrt(length(fwidth(IN.texcoord))) / 2.0 + 0.5);
+				color = lerp(_BackgroundColor, color, saturate(dist * rsqrt(length(fwidth(IN.texcoord))) / 2.0 + 0.5));
 				#if ETC1_EXTERNAL_ALPHA
 					fixed alpha = tex2D(_AlphaTex, IN.texcoord).r;
 					color.a = lerp(color.a, alpha, _EnableExternalAlpha);
