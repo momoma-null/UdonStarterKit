@@ -5,7 +5,7 @@ using VRC.SDKBase;
 namespace MomomaAssets.UdonStarterKit.Udon
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
-    sealed class CalibrationChair : UdonSharpBehaviour
+    public sealed class CalibrationChair : UdonSharpBehaviour
     {
         [SerializeField]
         Transform _seatPosition = null;
