@@ -106,7 +106,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
                 EditorGUILayout.PropertyField(_spriteProperty, Styles.switchIconText);
                 _spriteProperty.serializedObject.ApplyModifiedProperties();
             }
-            _specialSwitch.DrawInspector();
+            _specialSwitch?.DrawInspector();
         }
 
         protected override void DrawDeveloperInspector()
