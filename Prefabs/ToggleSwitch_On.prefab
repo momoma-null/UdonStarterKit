@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: -617992517, guid: 661092b4961be7145bfbe56e1e62337b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gain: 40
+  Gain: 15
   Far: 3
   Near: 0
   VolumetricRadius: 0
@@ -9895,7 +9895,7 @@ MonoBehaviour:
   publicVariablesUnityEngineObjects:
   - {fileID: 3394999316258842997}
   - {fileID: 3394999316321305358}
-  - {fileID: 8300000, guid: 15be74e7d0df5154ba7ff52ad5c46433, type: 3}
+  - {fileID: 8300000, guid: 1cb730916e3b07849b3eeea75a80aa15, type: 3}
   publicVariablesSerializationDataFormat: 0
 --- !u!1 &3394999318107547441
 GameObject:
