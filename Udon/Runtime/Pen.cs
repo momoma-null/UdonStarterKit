@@ -26,7 +26,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         ConstraintSource constraintSource;
         Transform trailTransform;
-        bool syncCompleted;
+        bool isDrawing;
+        bool waitingData;
         int syncRetryCount;
 
         void Start()
@@ -70,7 +71,17 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         public override void OnDeserialization()
         {
-            trailRenderer.SetPositions(syncedPositions);
+            if (isDrawing)
+                waitingData = true;
+            else
+                ApplyReceivedData();
+        }
+
+        void ApplyReceivedData()
+        {
+            trailRenderer.Clear();
+            trailRenderer.AddPositions(syncedPositions);
+            waitingData = false;
         }
 
         public void OnPickupPen()
@@ -89,6 +100,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             constraint.SetSource(0, constraintSource);
             trailTransform.position = penPoint.position;
             writingAudio.Play();
+            isDrawing = true;
         }
 
         public void EndUsing()
@@ -103,6 +115,9 @@ namespace MomomaAssets.UdonStarterKit.Udon
             constraint.SetSource(0, constraintSource);
             trailTransform.position = farPoint.position;
             writingAudio.Stop();
+            isDrawing = false;
+            if (waitingData)
+                ApplyReceivedData();
         }
 
         public void Clear()
@@ -113,6 +128,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
         public void ClearAll()
         {
             trailRenderer.Clear();
+            syncedPositions = new Vector3[0];
         }
     }
 }
