@@ -9,21 +9,25 @@ namespace MomomaAssets.UdonStarterKit.Udon
         [SerializeField]
         UdonSharpBehaviour onPickupReceiver;
         [SerializeField]
+        [CustomEventPopup(nameof(onPickupReceiver))]
         string onPickupSendEventName;
 
         [SerializeField]
         UdonSharpBehaviour onDropReceiver;
         [SerializeField]
+        [CustomEventPopup(nameof(onDropReceiver))]
         string onDropSendEventName;
 
         [SerializeField]
         UdonSharpBehaviour onPickupUseDownReceiver;
         [SerializeField]
+        [CustomEventPopup(nameof(onPickupUseDownReceiver))]
         string onPickupUseDownSendEventName;
 
         [SerializeField]
         UdonSharpBehaviour onPickupUseUpReceiver;
         [SerializeField]
+        [CustomEventPopup(nameof(onPickupUseUpReceiver))]
         string onPickupUseUpSendEventName;
 
         public override void OnPickup()

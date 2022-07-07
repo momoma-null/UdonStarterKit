@@ -33,10 +33,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
         {
             constraintSource = constraint.GetSource(0);
             trailTransform = trailRenderer.transform;
-            if (Networking.IsOwner(gameObject))
-            {
-                syncCompleted = true;
-            }
         }
 
         public override void OnPlayerJoined(VRCPlayerApi player)
@@ -59,7 +55,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
                 }
             }
             syncRetryCount = 0;
-            syncedPositions = new Vector3[0];
         }
 
         public void SendData()
@@ -75,10 +70,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         public override void OnDeserialization()
         {
-            if (syncCompleted)
-                return;
             trailRenderer.SetPositions(syncedPositions);
-            syncCompleted = true;
         }
 
         public void OnPickupPen()

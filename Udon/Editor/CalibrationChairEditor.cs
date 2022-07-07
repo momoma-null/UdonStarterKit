@@ -31,7 +31,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         void OnSceneGUI()
         {
-            _udonSharpBehaviour.UpdateProxy();
             if (!(_seatPositionProperty.objectReferenceValue is Transform seatTransform))
                 return;
             var kneesTransform = seatTransform.parent;
