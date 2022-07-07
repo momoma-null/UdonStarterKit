@@ -15,7 +15,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
         float defaultAvatarAudioFarRadius = 40f;
 
         bool _inRoomSelf;
-        VRCPlayerApi[] _players = new VRCPlayerApi[32];
+        VRCPlayerApi[] players = new VRCPlayerApi[1];
         string tagName;
 
         void Start()
@@ -29,9 +29,9 @@ namespace MomomaAssets.UdonStarterKit.Udon
             {
                 _inRoomSelf = true;
                 GetPlayers();
-                foreach (var p in _players)
+                foreach (var p in players)
                 {
-                    if (p.IsValid() && !p.isLocal)
+                    if (p != null && p.IsValid() && !p.isLocal)
                     {
                         SetAudioRange(player, p.GetPlayerTag(tagName) == IN_ROOM_TAG_NAME);
                     }
@@ -50,9 +50,9 @@ namespace MomomaAssets.UdonStarterKit.Udon
             {
                 _inRoomSelf = false;
                 GetPlayers();
-                foreach (var p in _players)
+                foreach (var p in players)
                 {
-                    if (p.IsValid() && !p.isLocal)
+                    if (p != null && p.IsValid() && !p.isLocal)
                     {
                         SetAudioRange(player, p.GetPlayerTag(tagName) != IN_ROOM_TAG_NAME);
                     }
@@ -82,11 +82,9 @@ namespace MomomaAssets.UdonStarterKit.Udon
         void GetPlayers()
         {
             var playerCount = VRCPlayerApi.GetPlayerCount();
-            if (playerCount > _players.Length)
-            {
-                _players = new VRCPlayerApi[playerCount + 4];
-            }
-            VRCPlayerApi.GetPlayers(_players);
+            if (playerCount != players.Length)
+                players = new VRCPlayerApi[playerCount];
+            VRCPlayerApi.GetPlayers(players);
         }
     }
 }
