@@ -23,12 +23,21 @@ namespace MomomaAssets.UdonStarterKit.Udon
             tagName = $"{nameof(TalkRoom)}_{GetInstanceID()}";
         }
 
+        public override void OnPlayerJoined(VRCPlayerApi player)
+        {
+            GetPlayers();
+        }
+
+        public override void OnPlayerLeft(VRCPlayerApi player)
+        {
+            GetPlayers();
+        }
+
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
         {
             if (player.isLocal)
             {
                 _inRoomSelf = true;
-                GetPlayers();
                 foreach (var p in players)
                 {
                     if (p != null && p.IsValid() && !p.isLocal)
@@ -49,7 +58,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
             if (player.isLocal)
             {
                 _inRoomSelf = false;
-                GetPlayers();
                 foreach (var p in players)
                 {
                     if (p != null && p.IsValid() && !p.isLocal)
