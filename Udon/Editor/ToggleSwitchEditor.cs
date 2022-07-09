@@ -1,6 +1,7 @@
 using System.IO;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace MomomaAssets.UdonStarterKit.Udon
 {
@@ -10,7 +11,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
         static class Styles
         {
             public static GUIContent switchIconText = EditorGUIUtility.TrTextContent("Switch Icon");
+            public static GUIContent bgmOptionText = EditorGUIUtility.TrTextContent("BGM Option");
             public static GUIContent bgmText = EditorGUIUtility.TrTextContent("BGM");
+            public static GUIContent maxVolumeText = EditorGUIUtility.TrTextContent("Max Volume");
+            public static GUIContent volumeText = EditorGUIUtility.TrTextContent("Volume");
         }
 
         interface ISwitch
@@ -20,24 +24,38 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         sealed class BGMSwitch : ISwitch
         {
-            readonly SerializedObject _audioSourceSerializedObject;
+            readonly SerializedObject audioSourceSerializedObject;
+            readonly SerializedObject sliderSerializedObject;
             readonly SerializedProperty m_audioClipProperty;
+            readonly SerializedProperty m_MaxValueProperty;
+            readonly SerializedProperty m_ValueProperty;
 
-            public BGMSwitch(AudioSource audioSource)
+            public BGMSwitch(AudioSource audioSource, Slider slider)
             {
-                _audioSourceSerializedObject = new SerializedObject(audioSource);
-                m_audioClipProperty = _audioSourceSerializedObject.FindProperty("m_audioClip");
+                audioSourceSerializedObject = new SerializedObject(audioSource);
+                m_audioClipProperty = audioSourceSerializedObject.FindProperty("m_audioClip");
+                sliderSerializedObject = new SerializedObject(slider);
+                m_MaxValueProperty = sliderSerializedObject.FindProperty("m_MaxValue");
+                m_ValueProperty = sliderSerializedObject.FindProperty("m_Value");
             }
 
             public void DrawInspector()
             {
-                _audioSourceSerializedObject.Update();
-                EditorGUILayout.PropertyField(m_audioClipProperty, Styles.bgmText);
-                _audioSourceSerializedObject.ApplyModifiedProperties();
+                audioSourceSerializedObject.Update();
+                sliderSerializedObject.Update();
+                EditorGUILayout.Space();
+                EditorGUILayout.LabelField(Styles.bgmOptionText, EditorStyles.boldLabel);
+                using (new EditorGUI.IndentLevelScope(1))
+                {
+                    EditorGUILayout.PropertyField(m_audioClipProperty, Styles.bgmText);
+                    EditorGUILayout.PropertyField(m_MaxValueProperty, Styles.maxVolumeText);
+                    EditorGUILayout.Slider(m_ValueProperty, 0f, m_MaxValueProperty.floatValue, Styles.volumeText);
+                }
+                audioSourceSerializedObject.ApplyModifiedProperties();
+                sliderSerializedObject.ApplyModifiedProperties();
             }
         }
 
-        SerializedProperty _interactTextProperty;
         SerializedProperty _isOnProperty;
         SerializedProperty _useSyncProperty;
         SerializedProperty _switchAudioProperty;
@@ -50,11 +68,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
         protected override void OnEnable()
         {
             base.OnEnable();
-            _interactTextProperty = _udonSerializedObject.FindProperty("interactText");
             _isOnProperty = serializedObject.FindProperty("_isOn");
             _useSyncProperty = serializedObject.FindProperty("_useSync");
             _switchAudioProperty = serializedObject.FindProperty("_switchAudio");
-            var spriteRenderer = _udonBehaviour.GetComponentInChildren<SpriteRenderer>();
+            var spriteRenderer = _udonSharpBehaviour.GetComponentInChildren<SpriteRenderer>();
             if (spriteRenderer != null)
             {
                 _spriteProperty = new SerializedObject(spriteRenderer).FindProperty("m_Sprite");
@@ -63,15 +80,15 @@ namespace MomomaAssets.UdonStarterKit.Udon
             if (_animatorProperty.objectReferenceValue != null)
                 m_ControllerProperty = new SerializedObject(_animatorProperty.objectReferenceValue).FindProperty("m_Controller");
             _audioSourceProperty = serializedObject.FindProperty("_audioSource");
-            var audioSource = _udonBehaviour.transform.Find("Controller/BGM")?.GetComponent<AudioSource>();
-            if (audioSource != null)
-                _specialSwitch = new BGMSwitch(audioSource);
+            var audioSource = transform.Find("Controller/BGM")?.GetComponent<AudioSource>();
+            var slider = transform.Find("Controller/FloatProxy")?.GetComponent<Slider>();
+            if (audioSource != null && slider != null)
+                _specialSwitch = new BGMSwitch(audioSource, slider);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            _interactTextProperty = null;
             _isOnProperty = null;
             _useSyncProperty = null;
             _switchAudioProperty = null;
@@ -84,7 +101,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         protected override void DrawInspector()
         {
-            EditorGUILayout.PropertyField(_interactTextProperty);
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(_isOnProperty);
             if (EditorGUI.EndChangeCheck())
@@ -113,7 +129,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
         {
             EditorGUILayout.PropertyField(_animatorProperty);
             EditorGUILayout.PropertyField(_audioSourceProperty);
-            EditorGUILayout.Separator();
         }
     }
 }

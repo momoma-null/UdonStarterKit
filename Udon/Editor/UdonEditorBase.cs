@@ -1,9 +1,8 @@
 ﻿using System;
-using UnityEngine;
-using UnityEditor;
-using VRC.Udon;
 using UdonSharp;
 using UdonSharpEditor;
+using UnityEditor;
+using UnityEngine;
 
 namespace MomomaAssets.UdonStarterKit.Udon
 {
@@ -11,62 +10,52 @@ namespace MomomaAssets.UdonStarterKit.Udon
     {
         static class Styles
         {
-            public static readonly GUIContent developerText = EditorGUIUtility.TrTextContent("Developer");
+            public static readonly GUIContent developerOptionText = EditorGUIUtility.TrTextContent(ObjectNames.NicifyVariableName(nameof(developerOption)));
         }
 
         [Serializable]
         sealed class DummyClass { }
 
         [SerializeField]
-        DummyClass _openDeveloperInspector;
+        DummyClass developerOption;
 
-        protected UdonBehaviour _udonBehaviour;
         protected UdonSharpBehaviour _udonSharpBehaviour;
-        protected SerializedObject _udonSerializedObject;
-        SerializedProperty _openDeveloperInspectorProperty;
+        protected Transform transform;
+
+        SerializedProperty developerOptionProperty;
 
         protected virtual void OnEnable()
         {
             _udonSharpBehaviour = target as UdonSharpBehaviour;
-            _udonBehaviour = UdonSharpEditorUtility.GetBackingUdonBehaviour(_udonSharpBehaviour);
-            _udonSerializedObject = new SerializedObject(_udonBehaviour);
-            _openDeveloperInspectorProperty = new SerializedObject(this).FindProperty(nameof(_openDeveloperInspector));
+            developerOptionProperty = new SerializedObject(this).FindProperty(nameof(developerOption));
+            transform = _udonSharpBehaviour.transform;
         }
 
         protected virtual void OnDisable()
         {
-            _udonBehaviour = null;
             _udonSharpBehaviour = null;
-            _udonSerializedObject = null;
         }
 
         public sealed override void OnInspectorGUI()
         {
             if (UdonSharpGUI.DrawProgramSource(target, true))
                 return;
+            UdonSharpGUI.DrawInteractSettings(target);
             serializedObject.Update();
-            EditorGUILayout.Space();
-            DrawInspector();
-            EditorGUILayout.Space();
-            try
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
-                _openDeveloperInspectorProperty.isExpanded = EditorGUILayout.BeginFoldoutHeaderGroup(_openDeveloperInspectorProperty.isExpanded, Styles.developerText);
-                if (_openDeveloperInspectorProperty.isExpanded)
+                DrawInspector();
+            }
+            developerOptionProperty.isExpanded = EditorGUILayout.Foldout(developerOptionProperty.isExpanded, Styles.developerOptionText, true);
+            if (developerOptionProperty.isExpanded)
+            {
+                using (new EditorGUI.IndentLevelScope(1))
                 {
                     DrawDeveloperInspector();
-                    UdonSharpGUI.DrawInteractSettings(target);
-                    UdonSharpGUI.DrawUtilities(target);
                 }
             }
-            finally
-            {
-                EditorGUILayout.EndFoldoutHeaderGroup();
-            }
-            if (serializedObject.hasModifiedProperties)
-            {
-                Undo.RecordObject(_udonBehaviour, "change UdonBehaviour values");
-                serializedObject.ApplyModifiedProperties();
-            }
+            UdonSharpGUI.DrawUtilities(target);
+            serializedObject.ApplyModifiedProperties();
         }
 
         protected abstract void DrawInspector();

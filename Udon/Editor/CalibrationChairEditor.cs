@@ -1,12 +1,16 @@
-﻿using UnityEngine;
-using UnityEditor;
-using UdonSharpEditor;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace MomomaAssets.UdonStarterKit.Udon
 {
     [CustomEditor(typeof(CalibrationChair))]
     sealed class CalibrationChairEditor : UdonEditorBase
     {
+        static class Styles
+        {
+            public static GUIContent kneeText = EditorGUIUtility.TrTextContent("Knee Position");
+        }
+
         SerializedProperty _seatPositionProperty;
 
         protected override void OnEnable()
@@ -26,7 +30,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
         protected override void DrawDeveloperInspector()
         {
             EditorGUILayout.PropertyField(_seatPositionProperty);
-            EditorGUILayout.Separator();
         }
 
         void OnSceneGUI()
@@ -36,6 +39,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             var kneesTransform = seatTransform.parent;
             EditorGUI.BeginChangeCheck();
             var position = Handles.PositionHandle(kneesTransform.position, kneesTransform.rotation);
+            Handles.Label(position, Styles.kneeText);
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(kneesTransform, "Change Knees Position");
@@ -43,7 +47,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             }
             if (Event.current.type == EventType.Repaint)
             {
-                Handles.SphereHandleCap(0, position, Quaternion.identity, 0.01f, EventType.Repaint);
+                Handles.DrawLine(position + kneesTransform.right * 0.2f, position - kneesTransform.right * 0.2f);
             }
         }
     }
