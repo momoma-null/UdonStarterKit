@@ -26,7 +26,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
         bool _syncedIsOn;
 
         Collider _collider = null;
-        float _VRInteractInterval = 0f;
         VRCPlayerApi _localPlayer;
 
         // GCAlloc measures
@@ -38,20 +37,21 @@ namespace MomomaAssets.UdonStarterKit.Udon
             if (_collider == null)
                 enabled = false;
             _localPlayer = Networking.LocalPlayer;
+            if (_localPlayer != null && _localPlayer.IsUserInVR())
+            {
+                DeciUpdate();
+            }
         }
 
-        void FixedUpdate()
+        public void DeciUpdate()
         {
-            if (_VRInteractInterval > 0f)
-                _VRInteractInterval -= Time.fixedDeltaTime;
-            if (_VRInteractInterval <= 0f && _localPlayer != null && _localPlayer.IsUserInVR())
-            {
-                _tempPosition = _localPlayer.GetBonePosition(HumanBodyBones.RightIndexDistal);
-                if (CheckCollision(_tempPosition))
-                    return;
-                _tempPosition = _localPlayer.GetBonePosition(HumanBodyBones.LeftIndexDistal);
-                CheckCollision(_tempPosition);
-            }
+            _tempPosition = _localPlayer.GetBonePosition(HumanBodyBones.RightIndexDistal);
+            if (CheckCollision(_tempPosition))
+                return;
+            _tempPosition = _localPlayer.GetBonePosition(HumanBodyBones.LeftIndexDistal);
+            if (CheckCollision(_tempPosition))
+                return;
+            SendCustomEventDelayedSeconds(nameof(DeciUpdate), 0.1f);
         }
 
         bool CheckCollision(Vector3 position)
@@ -59,7 +59,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             if (0.004f > Vector3.SqrMagnitude(_collider.ClosestPointOnBounds(position) - position))
             {
                 Use();
-                _VRInteractInterval = 1f;
+                SendCustomEventDelayedSeconds(nameof(DeciUpdate), 1f);
                 return true;
             }
             return false;
@@ -72,8 +72,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         void Use()
         {
-            if (0f < _VRInteractInterval)
-                return;
             _isOn = !_isOn;
             if (_useSync)
             {
