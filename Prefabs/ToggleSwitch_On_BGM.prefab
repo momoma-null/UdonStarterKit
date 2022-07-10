@@ -327,7 +327,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 0.2
   m_WholeNumbers: 0
-  m_Value: 0.2
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -510,11 +510,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8094324858841958742, guid: 8ddd731e016ea764aa2581fa807ed2a8,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ddd731e016ea764aa2581fa807ed2a8, type: 3}
