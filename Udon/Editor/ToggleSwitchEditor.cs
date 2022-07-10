@@ -61,6 +61,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
         SerializedProperty _useSyncProperty;
         SerializedProperty _switchAudioProperty;
         SerializedProperty _spriteProperty;
+        SerializedProperty _toggleAnimatorProperty;
         SerializedProperty _animatorProperty;
         SerializedProperty _audioSourceProperty;
         SerializedProperty m_ControllerProperty;
@@ -80,6 +81,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             {
                 _spriteProperty = new SerializedObject(spriteRenderer).FindProperty("m_Sprite");
             }
+            _toggleAnimatorProperty = serializedObject.FindProperty("_toggleAnimator");
             _animatorProperty = serializedObject.FindProperty("_animator");
             if (_animatorProperty.objectReferenceValue != null)
                 m_ControllerProperty = new SerializedObject(_animatorProperty.objectReferenceValue).FindProperty("m_Controller");
@@ -110,6 +112,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             _useSyncProperty = null;
             _switchAudioProperty = null;
             _spriteProperty = null;
+            _toggleAnimatorProperty = null;
             _animatorProperty = null;
             m_ControllerProperty = null;
             _audioSourceProperty = null;
@@ -142,6 +145,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
                 EditorGUILayout.PropertyField(_spriteProperty, Styles.switchIconText);
                 _spriteProperty.serializedObject.ApplyModifiedProperties();
             }
+            EditorGUILayout.PropertyField(_toggleAnimatorProperty);
             toggleObjectsList?.DoLayoutList();
             _specialSwitch?.DrawInspector();
         }
