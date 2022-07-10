@@ -173,7 +173,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         protected override void DrawDeveloperInspector()
         {
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(_animatorProperty);
+            if (EditorGUI.EndChangeCheck())
+                m_ControllerProperty = _animatorProperty.objectReferenceValue != null ? new SerializedObject(_animatorProperty.objectReferenceValue).FindProperty("m_Controller") : null;
             EditorGUILayout.PropertyField(_audioSourceProperty);
         }
     }
