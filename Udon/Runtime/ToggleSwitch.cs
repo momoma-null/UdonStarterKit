@@ -16,6 +16,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
         bool _useSync;
         [SerializeField]
         AudioClip _switchAudio = null;
+        [SerializeField]
+        Animator _toggleAnimator = null;
+        [SerializeField]
+        string _toggleAnimatorParameter = "";
 
         [SerializeField]
         Animator _animator = null;
@@ -99,6 +103,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
             if (_animator != null)
             {
                 _animator.SetBool(k_toggleParameterName, _isOn);
+            }
+            if (_toggleAnimator != null)
+            {
+                _toggleAnimator.SetBool(_toggleAnimatorParameter, _isOn);
             }
         }
     }
