@@ -13,7 +13,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
             public static GUIContent switchIconText = EditorGUIUtility.TrTextContent("Switch Icon");
             public static GUIContent bgmOptionText = EditorGUIUtility.TrTextContent("BGM Option");
             public static GUIContent bgmText = EditorGUIUtility.TrTextContent("BGM");
-            public static GUIContent maxVolumeText = EditorGUIUtility.TrTextContent("Max Volume");
             public static GUIContent volumeText = EditorGUIUtility.TrTextContent("Volume");
         }
 
@@ -28,7 +27,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
             readonly SerializedObject sliderSerializedObject;
             readonly SerializedProperty m_audioClipProperty;
             readonly SerializedProperty m_MaxValueProperty;
-            readonly SerializedProperty m_ValueProperty;
 
             public BGMSwitch(AudioSource audioSource, Slider slider)
             {
@@ -36,7 +34,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
                 m_audioClipProperty = audioSourceSerializedObject.FindProperty("m_audioClip");
                 sliderSerializedObject = new SerializedObject(slider);
                 m_MaxValueProperty = sliderSerializedObject.FindProperty("m_MaxValue");
-                m_ValueProperty = sliderSerializedObject.FindProperty("m_Value");
             }
 
             public void DrawInspector()
@@ -48,8 +45,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
                 using (new EditorGUI.IndentLevelScope(1))
                 {
                     EditorGUILayout.PropertyField(m_audioClipProperty, Styles.bgmText);
-                    EditorGUILayout.PropertyField(m_MaxValueProperty, Styles.maxVolumeText);
-                    EditorGUILayout.Slider(m_ValueProperty, 0f, m_MaxValueProperty.floatValue, Styles.volumeText);
+                    EditorGUILayout.Slider(m_MaxValueProperty, 0f, 1f, Styles.volumeText);
                 }
                 audioSourceSerializedObject.ApplyModifiedProperties();
                 sliderSerializedObject.ApplyModifiedProperties();
