@@ -356,6 +356,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DiningChair
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 61114c91a98767548a502d32bb290f24,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 81
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61114c91a98767548a502d32bb290f24, type: 3}
 --- !u!4 &424781920049363948 stripped
