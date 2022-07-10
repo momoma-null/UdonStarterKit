@@ -106,7 +106,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 0
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 3
   Pan2D: 0
   rolloffMode: 1
@@ -9867,7 +9867,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 0.184}
+  m_Size: {x: 1, y: 1, z: 0.00184}
   m_Center: {x: 0, y: 0, z: 0.092}
 --- !u!114 &-8413212607113239446
 MonoBehaviour:
@@ -9895,6 +9895,7 @@ MonoBehaviour:
   _useSync: 0
   _switchAudio: {fileID: 8300000, guid: 1cb730916e3b07849b3eeea75a80aa15, type: 3}
   _toggleAnimator: {fileID: 0}
+  _toggleObjects: []
   _animator: {fileID: 3394999316258842997}
   _audioSource: {fileID: 3394999316321305358}
 --- !u!114 &3394999317751511581
