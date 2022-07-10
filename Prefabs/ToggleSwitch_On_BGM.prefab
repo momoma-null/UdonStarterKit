@@ -83,7 +83,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -142,7 +142,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: cb9162c21621be14fb0b5a77c8c57d15, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.2
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -325,7 +325,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1524421340}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 0.2
+  m_MaxValue: 0.4
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -510,6 +510,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195127900927395784, guid: 8ddd731e016ea764aa2581fa807ed2a8,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195127900927395784, guid: 8ddd731e016ea764aa2581fa807ed2a8,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195127900927395784, guid: 8ddd731e016ea764aa2581fa807ed2a8,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1178757438}
+    - target: {fileID: 6195127900927395784, guid: 8ddd731e016ea764aa2581fa807ed2a8,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195127900927395784, guid: 8ddd731e016ea764aa2581fa807ed2a8,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195127900927395784, guid: 8ddd731e016ea764aa2581fa807ed2a8,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ddd731e016ea764aa2581fa807ed2a8, type: 3}
