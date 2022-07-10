@@ -62,13 +62,12 @@ namespace MomomaAssets.UdonStarterKit.Udon
         SerializedProperty _switchAudioProperty;
         SerializedProperty _spriteProperty;
         SerializedProperty _toggleAnimatorProperty;
+        SerializedProperty _toggleObjectsProperty;
         SerializedProperty _animatorProperty;
         SerializedProperty _audioSourceProperty;
         SerializedProperty m_ControllerProperty;
-        SerializedObject toggleSerializedObject;
-        SerializedProperty toggleCallsProperty;
         ISwitch _specialSwitch;
-        ReorderableList toggleObjectsList;
+        ReorderableList _toggleObjectsList;
 
         protected override void OnEnable()
         {
@@ -82,27 +81,18 @@ namespace MomomaAssets.UdonStarterKit.Udon
                 _spriteProperty = new SerializedObject(spriteRenderer).FindProperty("m_Sprite");
             }
             _toggleAnimatorProperty = serializedObject.FindProperty("_toggleAnimator");
+            _toggleObjectsProperty = serializedObject.FindProperty("_toggleObjects");
             _animatorProperty = serializedObject.FindProperty("_animator");
             if (_animatorProperty.objectReferenceValue != null)
                 m_ControllerProperty = new SerializedObject(_animatorProperty.objectReferenceValue).FindProperty("m_Controller");
             _audioSourceProperty = serializedObject.FindProperty("_audioSource");
-            var toggle = transform.Find("Controller/BoolProxy")?.GetComponent<Toggle>();
-            if (toggle != null)
-            {
-                toggleSerializedObject = new SerializedObject(toggle);
-                toggleCallsProperty = toggleSerializedObject.FindProperty("onValueChanged.m_PersistentCalls.m_Calls");
-                toggleObjectsList = new ReorderableList(toggleObjectProperties, typeof(SerializedProperty));
-                toggleObjectsList.onChangedCallback += _ => ReloadToggleObjectProperties();
-                toggleObjectsList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, Styles.toggleObjectsText);
-                toggleObjectsList.onAddCallback = _ => AddToggleObjectProperty();
-                toggleObjectsList.onRemoveCallback = _ => --toggleCallsProperty.arraySize;
-                toggleObjectsList.drawElementCallback = DrawToggleObjectProperty;
-                ReloadToggleObjectProperties();
-            }
             var audioSource = transform.Find("Controller/BGM")?.GetComponent<AudioSource>();
             var slider = transform.Find("Controller/FloatProxy")?.GetComponent<Slider>();
             if (audioSource != null && slider != null)
                 _specialSwitch = new BGMSwitch(audioSource, slider);
+            _toggleObjectsList = new ReorderableList(serializedObject, _toggleObjectsProperty);
+            _toggleObjectsList.drawHeaderCallback = r => EditorGUI.LabelField(r, _toggleObjectsProperty.displayName);
+            _toggleObjectsList.drawElementCallback = (r, i, a, f) => EditorGUI.PropertyField(r, _toggleObjectsProperty.GetArrayElementAtIndex(i));
         }
 
         protected override void OnDisable()
@@ -113,13 +103,12 @@ namespace MomomaAssets.UdonStarterKit.Udon
             _switchAudioProperty = null;
             _spriteProperty = null;
             _toggleAnimatorProperty = null;
+            _toggleObjectsProperty = null;
             _animatorProperty = null;
             m_ControllerProperty = null;
             _audioSourceProperty = null;
             _specialSwitch = null;
-            toggleSerializedObject?.Dispose();
-            toggleSerializedObject = null;
-            toggleCallsProperty = null;
+            _toggleObjectsList = null;
         }
 
         protected override void DrawInspector()
@@ -145,34 +134,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
                 EditorGUILayout.PropertyField(_spriteProperty, Styles.switchIconText);
                 _spriteProperty.serializedObject.ApplyModifiedProperties();
             }
+            EditorGUILayout.Space();
             EditorGUILayout.PropertyField(_toggleAnimatorProperty);
-            toggleObjectsList?.DoLayoutList();
+            _toggleObjectsList.DoLayoutList();
             _specialSwitch?.DrawInspector();
-        }
-
-        void ReloadToggleObjectProperties()
-        {
-            toggleObjectProperties.Clear();
-            for (var i = 0; i < toggleCallsProperty.arraySize; ++i)
-            {
-                var element = toggleCallsProperty.GetArrayElementAtIndex(i);
-                if (element.FindPropertyRelative("m_MethodName").stringValue == nameof(GameObject.SetActive))
-                {
-                    toggleObjectProperties.Add(element.FindPropertyRelative("m_Target"));
-                }
-            }
-        }
-
-        void AddToggleObjectProperty()
-        {
-            ++toggleCallsProperty.arraySize;
-            var element = toggleCallsProperty.GetArrayElementAtIndex(toggleCallsProperty.arraySize - 1);
-            element.FindPropertyRelative("m_MethodName").stringValue = nameof(GameObject.SetActive);
-        }
-
-        void DrawToggleObjectProperty(Rect rect, int index, bool isActive, bool isFocused)
-        {
-            EditorGUI.PropertyField(rect, toggleObjectProperties[index], GUIContent.none);
         }
 
         protected override void DrawDeveloperInspector()

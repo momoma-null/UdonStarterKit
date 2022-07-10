@@ -18,6 +18,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
         AudioClip _switchAudio = null;
         [SerializeField]
         Animator _toggleAnimator = null;
+        [SerializeField]
+        GameObject[] _toggleObjects = new GameObject[0];
 
         [SerializeField]
         Animator _animator = null;
@@ -105,6 +107,11 @@ namespace MomomaAssets.UdonStarterKit.Udon
             if (_toggleAnimator != null)
             {
                 _toggleAnimator.SetBool(k_toggleParameterName, _isOn);
+            }
+            foreach (var obj in _toggleObjects)
+            {
+                if (obj != null)
+                    obj.SetActive(_isOn);
             }
         }
     }
