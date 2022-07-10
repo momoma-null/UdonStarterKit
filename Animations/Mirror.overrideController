@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Mirror
+  m_Controller: {fileID: 9100000, guid: bd12f466a04a21543a8eb25f1352d405, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: c667e05ab2abdc949b88640632898a06, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d47c86c48d3426b488a0a3d5f1f2c611, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 8cf34440c3b73cb44858ce20303c28b4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: de203c39dad1a1745bf629af04dd3fa8, type: 2}
