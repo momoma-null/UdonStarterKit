@@ -474,6 +474,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8413212607113239446, guid: 8ddd731e016ea764aa2581fa807ed2a8,
         type: 3}
+      propertyPath: _toggleAnimator
+      value: 
+      objectReference: {fileID: 6295930698299478163}
+    - target: {fileID: -8413212607113239446, guid: 8ddd731e016ea764aa2581fa807ed2a8,
+        type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: -8413212607113239446, guid: 8ddd731e016ea764aa2581fa807ed2a8,
