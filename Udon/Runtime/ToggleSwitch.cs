@@ -102,8 +102,11 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         public override void OnDeserialization()
         {
-            _isOn = _syncedIsOn;
-            Apply();
+            if (_useSync)
+            {
+                _isOn = _syncedIsOn;
+                Apply();
+            }
         }
 
         void Apply()
