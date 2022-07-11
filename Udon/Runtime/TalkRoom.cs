@@ -44,7 +44,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
                 {
                     if (p != null && p.IsValid() && !p.isLocal)
                     {
-                        SetAudioRange(player, p.GetPlayerTag(tagName) == IN_ROOM_TAG_NAME);
+                        SetAudioRange(p, p.GetPlayerTag(tagName) == IN_ROOM_TAG_NAME);
                     }
                 }
             }
@@ -64,7 +64,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
                 {
                     if (p != null && p.IsValid() && !p.isLocal)
                     {
-                        SetAudioRange(player, p.GetPlayerTag(tagName) != IN_ROOM_TAG_NAME);
+                        SetAudioRange(p, p.GetPlayerTag(tagName) != IN_ROOM_TAG_NAME);
                     }
                 }
             }
