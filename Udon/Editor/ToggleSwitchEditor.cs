@@ -86,8 +86,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
             if (_animatorProperty.objectReferenceValue != null)
                 m_ControllerProperty = new SerializedObject(_animatorProperty.objectReferenceValue).FindProperty("m_Controller");
             _audioSourceProperty = serializedObject.FindProperty("_audioSource");
-            var audioSource = transform.Find("Controller/BGM")?.GetComponent<AudioSource>();
-            var slider = transform.Find("Controller/FloatProxy")?.GetComponent<Slider>();
+            var audioSource = transform.Find("BGMController/BGM")?.GetComponent<AudioSource>();
+            var slider = transform.Find("BGMController/FloatProxy")?.GetComponent<Slider>();
             if (audioSource != null && slider != null)
                 _specialSwitch = new BGMSwitch(audioSource, slider);
             _toggleObjectsList = new ReorderableList(serializedObject, _toggleObjectsProperty);
