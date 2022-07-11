@@ -26,6 +26,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
         public override void OnPlayerJoined(VRCPlayerApi player)
         {
             GetPlayers();
+            if (_inRoomSelf && player.GetPlayerTag(tagName) != IN_ROOM_TAG_NAME)
+                SetAudioRange(player, false);
         }
 
         public override void OnPlayerLeft(VRCPlayerApi player)
