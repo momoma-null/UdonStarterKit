@@ -31,6 +31,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         Collider _collider = null;
         VRCPlayerApi _localPlayer;
+        bool isLocked;
 
         // GCAlloc measures
         Vector3 _tempPosition;
@@ -64,9 +65,16 @@ namespace MomomaAssets.UdonStarterKit.Udon
             {
                 Use();
                 SendCustomEventDelayedSeconds(nameof(DeciUpdate), 1f);
+                isLocked = true;
+                SendCustomEventDelayedSeconds(nameof(Unlock), 0.5f);
                 return true;
             }
             return false;
+        }
+
+        public void Unlock()
+        {
+            isLocked = false;
         }
 
         public override void Interact()
@@ -76,6 +84,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         void Use()
         {
+            if (isLocked)
+                return;
             _isOn = !_isOn;
             if (_useSync)
             {
