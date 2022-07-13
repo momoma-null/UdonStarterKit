@@ -17,7 +17,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             Networking.LocalPlayer.UseAttachedStation();
         }
 
-        public void OneSecUpdate()
+        public void UpdateSeatPosition()
         {
             if (_seatedPlayer == null)
                 return;
@@ -28,13 +28,14 @@ namespace MomomaAssets.UdonStarterKit.Udon
             var height = (Mathf.Min(leftLowerLegPos.y, rightLowerLegPos.y) - playerPos.y) * -0.9f;
             var depth = Vector3.Distance(rightLowerLegPos, rightUpperLegPos) * -0.6f;
             _seatPosition.localPosition = new Vector3(0, height, depth);
-            SendCustomEventDelayedSeconds(nameof(OneSecUpdate), 1f);
+            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 0.5f);
         }
 
         public override void OnStationEntered(VRCPlayerApi player)
         {
             _seatedPlayer = player;
-            OneSecUpdate();
+            _seatPosition.localPosition = new Vector3(0f, -_seatPosition.parent.localPosition.y, 0f);
+            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 0.05f);
         }
 
         public override void OnStationExited(VRCPlayerApi player)
