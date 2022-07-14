@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.UI;
 using ReorderableList = UnityEditorInternal.ReorderableList;
@@ -21,6 +22,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
         interface ISwitch
         {
             void DrawInspector();
+            void OnSceneGUI();
         }
 
         sealed class BGMSwitch : ISwitch
@@ -51,6 +53,49 @@ namespace MomomaAssets.UdonStarterKit.Udon
                 }
                 audioSourceSerializedObject.ApplyModifiedProperties();
                 sliderSerializedObject.ApplyModifiedProperties();
+            }
+
+            public void OnSceneGUI() { }
+        }
+
+        sealed class MirrorSwitch : ISwitch
+        {
+            readonly Transform scaleTarget;
+            readonly SerializedObject scaleTargetObject;
+            readonly SerializedProperty m_LocalPositionProperty;
+            readonly SerializedProperty m_LocalScaleProperty;
+            readonly BoxBoundsHandle boundsHandle = new BoxBoundsHandle() { axes = PrimitiveBoundsHandle.Axes.X | PrimitiveBoundsHandle.Axes.Y };
+
+            public MirrorSwitch(Transform scaleTarget)
+            {
+                this.scaleTarget = scaleTarget;
+                this.scaleTargetObject = new SerializedObject(scaleTarget);
+                this.m_LocalPositionProperty = scaleTargetObject.FindProperty("m_LocalPosition");
+                this.m_LocalScaleProperty = scaleTargetObject.FindProperty("m_LocalScale");
+            }
+
+            public void DrawInspector() { }
+
+            public void OnSceneGUI()
+            {
+                scaleTargetObject.Update();
+                var handleMatrix = scaleTarget.parent == null ? Matrix4x4.identity : Matrix4x4.TRS(scaleTarget.parent.position, scaleTarget.parent.rotation, Vector3.one);
+                using (new Handles.DrawingScope(handleMatrix))
+                {
+                    boundsHandle.size = m_LocalScaleProperty.vector3Value;
+                    boundsHandle.center = m_LocalPositionProperty.vector3Value;
+                    boundsHandle.handleColor = Handles.color;
+                    EditorGUI.BeginChangeCheck();
+                    boundsHandle.DrawHandle();
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        var scale = boundsHandle.size;
+                        scale.z = 1f;
+                        m_LocalScaleProperty.vector3Value = scale;
+                        m_LocalPositionProperty.vector3Value = boundsHandle.center;
+                        scaleTargetObject.ApplyModifiedProperties();
+                    }
+                }
             }
         }
 
@@ -87,8 +132,11 @@ namespace MomomaAssets.UdonStarterKit.Udon
             _audioSourceProperty = serializedObject.FindProperty("_audioSource");
             var audioSource = transform.Find("BGMController/BGM")?.GetComponent<AudioSource>();
             var slider = transform.Find("BGMController/FloatProxy")?.GetComponent<Slider>();
+            var mirrorController = transform.parent?.Find("MirrorController");
             if (audioSource != null && slider != null)
                 _specialSwitch = new BGMSwitch(audioSource, slider);
+            else if (mirrorController != null)
+                _specialSwitch = new MirrorSwitch(mirrorController);
             _toggleObjectsList = new ReorderableList(serializedObject, _toggleObjectsProperty);
             _toggleObjectsList.drawHeaderCallback = r => EditorGUI.LabelField(r, _toggleObjectsProperty.displayName);
             _toggleObjectsList.drawElementCallback = (r, i, a, f) => EditorGUI.PropertyField(r, _toggleObjectsProperty.GetArrayElementAtIndex(i));
@@ -146,6 +194,12 @@ namespace MomomaAssets.UdonStarterKit.Udon
             if (EditorGUI.EndChangeCheck())
                 m_ControllerProperty = _animatorProperty.objectReferenceValue != null ? new SerializedObject(_animatorProperty.objectReferenceValue).FindProperty("m_Controller") : null;
             EditorGUILayout.PropertyField(_audioSourceProperty);
+        }
+
+
+        void OnSceneGUI()
+        {
+            _specialSwitch?.OnSceneGUI();
         }
     }
 }
