@@ -16,7 +16,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
             public static GUIContent bgmOptionText = EditorGUIUtility.TrTextContent("BGM Option");
             public static GUIContent bgmText = EditorGUIUtility.TrTextContent("BGM");
             public static GUIContent volumeText = EditorGUIUtility.TrTextContent("Volume");
-            public static GUIContent toggleObjectsText = EditorGUIUtility.TrTextContent("Toggle Objects");
         }
 
         interface ISwitch
