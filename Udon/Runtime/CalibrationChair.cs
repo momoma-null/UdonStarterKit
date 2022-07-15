@@ -21,21 +21,24 @@ namespace MomomaAssets.UdonStarterKit.Udon
         {
             if (_seatedPlayer == null)
                 return;
-            var playerPos = _seatedPlayer.GetPosition();
-            var leftLowerLegPos = _seatedPlayer.GetBonePosition(HumanBodyBones.LeftLowerLeg);
-            var rightLowerLegPos = _seatedPlayer.GetBonePosition(HumanBodyBones.RightLowerLeg);
-            var rightUpperLegPos = _seatedPlayer.GetBonePosition(HumanBodyBones.RightUpperLeg);
+            var inverseRot = Quaternion.Inverse(_seatedPlayer.GetRotation());
+            var playerPos = inverseRot * _seatedPlayer.GetPosition();
+            var leftLowerLegPos = inverseRot * _seatedPlayer.GetBonePosition(HumanBodyBones.LeftLowerLeg);
+            var rightLowerLegPos = inverseRot * _seatedPlayer.GetBonePosition(HumanBodyBones.RightLowerLeg);
             var height = (Mathf.Min(leftLowerLegPos.y, rightLowerLegPos.y) - playerPos.y) * -0.9f;
-            var depth = Vector3.Distance(rightLowerLegPos, rightUpperLegPos) * -0.6f;
+            var depth = (Mathf.Min(leftLowerLegPos.z, rightLowerLegPos.z) - playerPos.z) * -0.9f;
             _seatPosition.localPosition = new Vector3(0, height, depth);
-            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 0.5f);
         }
 
         public override void OnStationEntered(VRCPlayerApi player)
         {
             _seatedPlayer = player;
             _seatPosition.localPosition = new Vector3(0f, -_seatPosition.parent.localPosition.y, 0f);
-            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 0.05f);
+            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 0.01f);
+            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 0.5f);
+            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 1f);
+            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 1.5f);
+            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 2f);
         }
 
         public override void OnStationExited(VRCPlayerApi player)

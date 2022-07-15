@@ -49,7 +49,7 @@ PositionConstraint:
   m_IsLocked: 1
   m_Sources:
   - sourceTransform: {fileID: 740595330819515111}
-    weight: 0.1
+    weight: 0.15
   - sourceTransform: {fileID: 1116317886414314030}
     weight: 1
 --- !u!1 &1116317887480504343
@@ -109,7 +109,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1468019562818713653}
   m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.25, z: -0.25}
+  m_LocalPosition: {x: 0, y: 0.15, z: -0.25}
   m_LocalScale: {x: 0.05, y: 0.1, z: 0.05}
   m_Children: []
   m_Father: {fileID: 595602708601365963}
