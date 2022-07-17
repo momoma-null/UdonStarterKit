@@ -36,17 +36,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
         {
             if (!(_seatPositionProperty.objectReferenceValue is Transform seatTransform))
                 return;
-            var kneesTransform = seatTransform.parent;
-            EditorGUI.BeginChangeCheck();
-            var position = Handles.PositionHandle(kneesTransform.position, kneesTransform.rotation);
-            Handles.Label(position, Styles.kneeText);
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(kneesTransform, "Change Knees Position");
-                kneesTransform.position = position;
-            }
             if (Event.current.type == EventType.Repaint)
             {
+                var kneesTransform = seatTransform.parent;
+                var position = kneesTransform.position;
                 Handles.DrawLine(position + kneesTransform.right * 0.2f, position - kneesTransform.right * 0.2f);
             }
         }
