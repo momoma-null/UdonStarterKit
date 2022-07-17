@@ -40,6 +40,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             {
                 var kneesTransform = seatTransform.parent;
                 var position = kneesTransform.position;
+                Handles.Label(position, Styles.kneeText);
                 Handles.DrawLine(position + kneesTransform.right * 0.2f, position - kneesTransform.right * 0.2f);
             }
         }
