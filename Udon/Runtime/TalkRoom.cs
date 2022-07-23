@@ -5,7 +5,7 @@ using VRC.SDKBase;
 namespace MomomaAssets.UdonStarterKit.Udon
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
-    public class TalkRoom : UdonSharpBehaviour
+    public sealed class TalkRoom : UdonSharpBehaviour
     {
         const string IN_ROOM_TAG_NAME = "In";
 

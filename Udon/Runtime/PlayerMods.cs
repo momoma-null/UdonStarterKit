@@ -6,7 +6,7 @@ using VRC.SDKBase;
 namespace MomomaAssets.UdonStarterKit.Udon
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
-    public class PlayerMods : UdonSharpBehaviour
+    public sealed class PlayerMods : UdonSharpBehaviour
     {
         [SerializeField]
         float _walkSpeed = 2f;
