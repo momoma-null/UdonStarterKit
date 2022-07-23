@@ -50,10 +50,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         public void DeciUpdate()
         {
-            _tempPosition = _localPlayer.GetBonePosition(HumanBodyBones.RightIndexDistal);
+            _tempPosition = _localPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.RightHand).position;
             if (CheckCollision(_tempPosition))
                 return;
-            _tempPosition = _localPlayer.GetBonePosition(HumanBodyBones.LeftIndexDistal);
+            _tempPosition = _localPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.LeftHand).position;
             if (CheckCollision(_tempPosition))
                 return;
             SendCustomEventDelayedSeconds(nameof(DeciUpdate), 0.1f);
