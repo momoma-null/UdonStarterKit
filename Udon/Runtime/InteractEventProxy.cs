@@ -9,6 +9,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
         [SerializeField]
         UdonSharpBehaviour interactReceiver;
         [SerializeField]
+        [CustomEventPopup(nameof(interactReceiver))]
         string interactSendEventName;
 
         public override void Interact()
