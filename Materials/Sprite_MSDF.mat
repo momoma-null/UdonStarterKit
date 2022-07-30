@@ -32,7 +32,7 @@ Material:
     - _EnableExternalAlpha: 0
     - _PixelRange: 0.5
     m_Colors:
-    - _BackgroundColor: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 0.7490196}
+    - _BackgroundColor: {r: 0.66666603, g: 0.66666603, b: 0.66666603, a: 0.5019608}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
