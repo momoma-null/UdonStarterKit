@@ -6052,9 +6052,9 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 0.8500061
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 136
+          inSlope: 0.1499939
+          outSlope: 0.1499939
+          tangentMode: 34
           weightedMode: 0
           inWeight: 0.33333334
           outWeight: 0.33333334
