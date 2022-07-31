@@ -110,7 +110,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
         SerializedProperty _audioSourceProperty;
         SerializedProperty _sliderProperty;
         SerializedProperty _rendererProperty;
-        SerializedProperty m_ControllerProperty;
         ISwitch _specialSwitch;
         ReorderableList _toggleObjectsList;
 
@@ -124,8 +123,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
             _toggleAnimatorProperty = serializedObject.FindProperty("_toggleAnimator");
             _toggleObjectsProperty = serializedObject.FindProperty("_toggleObjects");
             _animatorProperty = serializedObject.FindProperty("_animator");
-            if (_animatorProperty.objectReferenceValue != null)
-                m_ControllerProperty = new SerializedObject(_animatorProperty.objectReferenceValue).FindProperty("m_Controller");
             _audioSourceProperty = serializedObject.FindProperty("_audioSource");
             _sliderProperty = serializedObject.FindProperty("_slider");
             _rendererProperty = serializedObject.FindProperty("_renderer");
@@ -155,7 +152,6 @@ namespace MomomaAssets.UdonStarterKit.Udon
             _animatorProperty = null;
             _sliderProperty = null;
             _sliderProperty = null;
-            m_ControllerProperty = null;
             _audioSourceProperty = null;
             _specialSwitch = null;
             _toggleObjectsList = null;
@@ -167,13 +163,14 @@ namespace MomomaAssets.UdonStarterKit.Udon
             EditorGUILayout.PropertyField(_isOnProperty);
             if (EditorGUI.EndChangeCheck())
             {
-                if (m_ControllerProperty != null)
+                if (_animatorProperty.objectReferenceValue is Animator animator)
                 {
-                    m_ControllerProperty.serializedObject.Update();
+                    var animatorSO = new SerializedObject(animator);
+                    var m_ControllerProperty = animatorSO.FindProperty("m_Controller");
                     var path = AssetDatabase.GetAssetPath(m_ControllerProperty.objectReferenceValue);
                     path = Path.Combine(Path.GetDirectoryName(path), _isOnProperty.boolValue ? "ToggleSwitch_On.controller" : "ToggleSwitch_Off.controller");
                     m_ControllerProperty.objectReferenceValue = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(path);
-                    m_ControllerProperty.serializedObject.ApplyModifiedProperties();
+                    animatorSO.ApplyModifiedProperties();
                 }
                 if (_sliderProperty.objectReferenceValue is Slider slider)
                 {
@@ -206,10 +203,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         protected override void DrawDeveloperInspector()
         {
-            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(_animatorProperty);
-            if (EditorGUI.EndChangeCheck())
-                m_ControllerProperty = _animatorProperty.objectReferenceValue != null ? new SerializedObject(_animatorProperty.objectReferenceValue).FindProperty("m_Controller") : null;
             EditorGUILayout.PropertyField(_audioSourceProperty);
             EditorGUILayout.PropertyField(_sliderProperty);
             EditorGUI.BeginChangeCheck();
