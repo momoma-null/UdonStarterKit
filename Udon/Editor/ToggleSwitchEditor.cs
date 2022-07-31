@@ -99,16 +99,17 @@ namespace MomomaAssets.UdonStarterKit.Udon
             }
         }
 
-        readonly List<SerializedProperty> toggleObjectProperties = new List<SerializedProperty>();
-
         SerializedProperty _isOnProperty;
         SerializedProperty _useSyncProperty;
         SerializedProperty _switchAudioProperty;
-        SerializedProperty _spriteProperty;
+        SerializedProperty _switchColorProperty;
+        SerializedProperty m_SpriteProperty;
         SerializedProperty _toggleAnimatorProperty;
         SerializedProperty _toggleObjectsProperty;
         SerializedProperty _animatorProperty;
         SerializedProperty _audioSourceProperty;
+        SerializedProperty _sliderProperty;
+        SerializedProperty _rendererProperty;
         SerializedProperty m_ControllerProperty;
         ISwitch _specialSwitch;
         ReorderableList _toggleObjectsList;
@@ -119,17 +120,16 @@ namespace MomomaAssets.UdonStarterKit.Udon
             _isOnProperty = serializedObject.FindProperty("_isOn");
             _useSyncProperty = serializedObject.FindProperty("_useSync");
             _switchAudioProperty = serializedObject.FindProperty("_switchAudio");
-            var spriteRenderer = _udonSharpBehaviour.GetComponentInChildren<SpriteRenderer>();
-            if (spriteRenderer != null)
-            {
-                _spriteProperty = new SerializedObject(spriteRenderer).FindProperty("m_Sprite");
-            }
+            _switchColorProperty = serializedObject.FindProperty("_switchColor");
             _toggleAnimatorProperty = serializedObject.FindProperty("_toggleAnimator");
             _toggleObjectsProperty = serializedObject.FindProperty("_toggleObjects");
             _animatorProperty = serializedObject.FindProperty("_animator");
             if (_animatorProperty.objectReferenceValue != null)
                 m_ControllerProperty = new SerializedObject(_animatorProperty.objectReferenceValue).FindProperty("m_Controller");
             _audioSourceProperty = serializedObject.FindProperty("_audioSource");
+            _sliderProperty = serializedObject.FindProperty("_slider");
+            _rendererProperty = serializedObject.FindProperty("_renderer");
+            UpdateSpriteProperties();
             var audioSource = transform.Find("BGMController/BGM")?.GetComponent<AudioSource>();
             var slider = transform.Find("BGMController/FloatProxy")?.GetComponent<Slider>();
             var mirrorController = transform.parent?.Find("MirrorController");
@@ -148,10 +148,13 @@ namespace MomomaAssets.UdonStarterKit.Udon
             _isOnProperty = null;
             _useSyncProperty = null;
             _switchAudioProperty = null;
-            _spriteProperty = null;
+            _switchColorProperty = null;
+            m_SpriteProperty = null;
             _toggleAnimatorProperty = null;
             _toggleObjectsProperty = null;
             _animatorProperty = null;
+            _sliderProperty = null;
+            _sliderProperty = null;
             m_ControllerProperty = null;
             _audioSourceProperty = null;
             _specialSwitch = null;
@@ -164,22 +167,36 @@ namespace MomomaAssets.UdonStarterKit.Udon
             EditorGUILayout.PropertyField(_isOnProperty);
             if (EditorGUI.EndChangeCheck())
             {
-                m_ControllerProperty.serializedObject.Update();
-                if (m_ControllerProperty != null && m_ControllerProperty.objectReferenceValue != null)
+                if (m_ControllerProperty != null)
                 {
+                    m_ControllerProperty.serializedObject.Update();
                     var path = AssetDatabase.GetAssetPath(m_ControllerProperty.objectReferenceValue);
                     path = Path.Combine(Path.GetDirectoryName(path), _isOnProperty.boolValue ? "ToggleSwitch_On.controller" : "ToggleSwitch_Off.controller");
                     m_ControllerProperty.objectReferenceValue = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(path);
                     m_ControllerProperty.serializedObject.ApplyModifiedProperties();
                 }
+                if (_sliderProperty.objectReferenceValue is Slider slider)
+                {
+                    var sliderSO = new SerializedObject(slider);
+                    var valueProperty = sliderSO.FindProperty("m_Value");
+                    valueProperty.floatValue = _isOnProperty.boolValue ? 1f : 0f;
+                    sliderSO.ApplyModifiedProperties();
+                    UpdateColor();
+                }
             }
             EditorGUILayout.PropertyField(_useSyncProperty);
             EditorGUILayout.PropertyField(_switchAudioProperty);
-            if (_spriteProperty != null)
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(_switchColorProperty);
+            if (EditorGUI.EndChangeCheck())
             {
-                _spriteProperty.serializedObject.Update();
-                EditorGUILayout.PropertyField(_spriteProperty, Styles.switchIconText);
-                _spriteProperty.serializedObject.ApplyModifiedProperties();
+                UpdateColor();
+            }
+            if (m_SpriteProperty != null)
+            {
+                m_SpriteProperty.serializedObject.Update();
+                EditorGUILayout.PropertyField(m_SpriteProperty, Styles.switchIconText);
+                m_SpriteProperty.serializedObject.ApplyModifiedProperties();
             }
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(_toggleAnimatorProperty);
@@ -194,8 +211,27 @@ namespace MomomaAssets.UdonStarterKit.Udon
             if (EditorGUI.EndChangeCheck())
                 m_ControllerProperty = _animatorProperty.objectReferenceValue != null ? new SerializedObject(_animatorProperty.objectReferenceValue).FindProperty("m_Controller") : null;
             EditorGUILayout.PropertyField(_audioSourceProperty);
+            EditorGUILayout.PropertyField(_sliderProperty);
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(_rendererProperty);
+            if (EditorGUI.EndChangeCheck())
+                UpdateSpriteProperties();
         }
 
+        void UpdateSpriteProperties()
+        {
+            m_SpriteProperty = _rendererProperty.objectReferenceValue is SpriteRenderer spriteRenderer ? new SerializedObject(spriteRenderer).FindProperty("m_Sprite") : null;
+        }
+
+        void UpdateColor()
+        {
+            if (_rendererProperty.objectReferenceValue is SpriteRenderer spriteRenderer)
+            {
+                Undo.RecordObject(spriteRenderer, "Sprite color");
+                if (_udonSharpBehaviour is ToggleSwitch toggleSwitch)
+                    toggleSwitch.UpdateColor();
+            }
+        }
 
         void OnSceneGUI()
         {

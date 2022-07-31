@@ -1,5 +1,6 @@
 ﻿using UdonSharp;
 using UnityEngine;
+using UnityEngine.UI;
 using VRC.SDKBase;
 
 namespace MomomaAssets.UdonStarterKit.Udon
@@ -17,6 +18,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
         [SerializeField]
         AudioClip _switchAudio = null;
         [SerializeField]
+        Gradient _switchColor = new Gradient();
+        [SerializeField]
         Animator _toggleAnimator = null;
         [SerializeField]
         GameObject[] _toggleObjects = new GameObject[0];
@@ -25,6 +28,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
         Animator _animator = null;
         [SerializeField]
         AudioSource _audioSource = null;
+        [SerializeField]
+        Slider _slider = null;
+        [SerializeField]
+        SpriteRenderer _renderer = null;
 
         [UdonSynced]
         bool _syncedIsOn;
@@ -126,6 +133,11 @@ namespace MomomaAssets.UdonStarterKit.Udon
                 if (obj != null)
                     obj.SetActive(_isOn);
             }
+        }
+
+        public void UpdateColor()
+        {
+            _renderer.color = _switchColor.Evaluate(_slider.value);
         }
     }
 }

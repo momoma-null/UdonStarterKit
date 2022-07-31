@@ -56,10 +56,14 @@ Shader "MomomaShader/Sprite/MSDF"
 
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				float3 sample = tex2D(_MainTex, IN.texcoord);
+				float2 uv = IN.texcoord - 0.5;
+				float2 uvTex = uv * 1.61;
+				float3 sample = tex2D(_MainTex, uvTex + 0.5);
 				float dist = median(sample.r, sample.g, sample.b) - 0.5;
 				half4 color = IN.color;
-				color = lerp(_BackgroundColor, color, saturate(dist * max(1.0, 0.5 * dot(_MainTex_TexelSize.xy / _PixelRange, float2(1, 1) / fwidth(IN.texcoord))) + 0.5));
+				color = lerp(_BackgroundColor, color, saturate(dist * max(1.0, 0.5 * dot(_MainTex_TexelSize.xy / _PixelRange, 1.0 / fwidth(uvTex))) + 0.5 - (abs(uvTex.x) > 0.5) - (abs(uvTex.y) > 0.5)));
+				float rr = dot(uv, uv);
+				color.a *= saturate((0.23 - rr) * 50.0);
 				#if ETC1_EXTERNAL_ALPHA
 					fixed alpha = tex2D(_AlphaTex, IN.texcoord).r;
 					color.a = lerp(color.a, alpha, _EnableExternalAlpha);
