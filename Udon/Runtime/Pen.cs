@@ -34,6 +34,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
         {
             constraintSource = constraint.GetSource(0);
             trailTransform = trailRenderer.transform;
+            writingAudio.Play();
+            writingAudio.Pause();
         }
 
         public override void OnPlayerJoined(VRCPlayerApi player)
@@ -99,7 +101,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             constraintSource.sourceTransform = penPoint;
             constraint.SetSource(0, constraintSource);
             trailTransform.position = penPoint.position;
-            writingAudio.Play();
+            writingAudio.UnPause();
             isDrawing = true;
         }
 
@@ -114,7 +116,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             constraintSource.sourceTransform = farPoint;
             constraint.SetSource(0, constraintSource);
             trailTransform.position = farPoint.position;
-            writingAudio.Stop();
+            writingAudio.Pause();
             isDrawing = false;
             if (waitingData)
                 ApplyReceivedData();
