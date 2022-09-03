@@ -1,6 +1,9 @@
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
+#if !COMPILER_UDONSHARP && UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace MomomaAssets.UdonStarterKit.Udon
 {
@@ -45,5 +48,20 @@ namespace MomomaAssets.UdonStarterKit.Udon
         {
             _seatedPlayer = null;
         }
+
+#if !COMPILER_UDONSHARP && UNITY_EDITOR
+        static class Styles
+        {
+            public static GUIContent kneeText = EditorGUIUtility.TrTextContent("Knee Position");
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            var kneesTransform = _seatPosition.parent;
+            var position = kneesTransform.position;
+            Gizmos.DrawLine(position + kneesTransform.right * 0.2f, position - kneesTransform.right * 0.2f);
+            Handles.Label(position, Styles.kneeText);
+        }
+#endif
     }
 }
