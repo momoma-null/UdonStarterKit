@@ -12,8 +12,19 @@ namespace MomomaAssets.UdonStarterKit.Udon
     {
         [SerializeField]
         Transform _seatPosition = null;
+        [SerializeField]
+        bool _disabledWhenVR = true;
 
         VRCPlayerApi _seatedPlayer;
+
+        void Start()
+        {
+            if (_disabledWhenVR && Networking.LocalPlayer != null && Networking.LocalPlayer.IsUserInVR())
+            {
+                var collider = GetComponent<Collider>();
+                collider.enabled = false;
+            }
+        }
 
         public override void Interact()
         {
