@@ -38,10 +38,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         Collider _collider = null;
         VRCPlayerApi _localPlayer;
-        bool isLocked;
-
-        // GCAlloc measures
-        Vector3 _tempPosition;
+        bool isLocked = false;
 
         void Start()
         {
@@ -57,18 +54,16 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         public void DeciUpdate()
         {
-            _tempPosition = _localPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.RightHand).position;
-            if (CheckCollision(_tempPosition))
+            if (CheckCollision(_localPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.RightHand).position))
                 return;
-            _tempPosition = _localPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.LeftHand).position;
-            if (CheckCollision(_tempPosition))
+            if (CheckCollision(_localPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.LeftHand).position))
                 return;
             SendCustomEventDelayedSeconds(nameof(DeciUpdate), 0.1f);
         }
 
         bool CheckCollision(Vector3 position)
         {
-            if (0.004f > Vector3.SqrMagnitude(_collider.ClosestPointOnBounds(position) - position))
+            if (!isLocked && 0.004f > Vector3.SqrMagnitude(_collider.ClosestPointOnBounds(position) - position))
             {
                 Use();
                 SendCustomEventDelayedSeconds(nameof(DeciUpdate), 1f);
@@ -86,20 +81,22 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         public override void Interact()
         {
-            Use();
+            if (!isLocked)
+            {
+                Use();
+                isLocked = true;
+                SendCustomEventDelayedSeconds(nameof(Unlock), 0.12f);
+            }
         }
 
         void Use()
         {
-            if (isLocked)
-                return;
             _isOn = !_isOn;
             if (_useSync)
             {
-                var go = this.gameObject;
-                if (!Networking.IsOwner(go))
+                if (!Networking.IsOwner(this.gameObject))
                 {
-                    Networking.SetOwner(Networking.LocalPlayer, go);
+                    Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
                 }
                 _syncedIsOn = _isOn;
                 RequestSerialization();
