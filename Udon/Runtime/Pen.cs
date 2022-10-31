@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
 using UnityEngine.Animations;
 using VRC.SDKBase;
@@ -36,6 +37,9 @@ namespace MomomaAssets.UdonStarterKit.Udon
             trailTransform = trailRenderer.transform;
             writingAudio.Play();
             writingAudio.Pause();
+            var farParent = farPoint.parent;
+            farParent.SetParent(null);
+            farParent.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         }
 
         public override void OnPlayerJoined(VRCPlayerApi player)
@@ -63,12 +67,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
         public void SendData()
         {
             var count = trailRenderer.positionCount;
+            syncedPositions = new Vector3[count];
             if (count > 0)
-            {
-                syncedPositions = new Vector3[count];
                 trailRenderer.GetPositions(syncedPositions);
-                RequestSerialization();
-            }
+            RequestSerialization();
         }
 
         public override void OnDeserialization()
@@ -82,7 +84,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
         void ApplyReceivedData()
         {
             trailRenderer.Clear();
-            trailRenderer.AddPositions(syncedPositions);
+            if (syncedPositions.Length > 0)
+                trailRenderer.AddPositions(syncedPositions);
             waitingData = false;
         }
 
@@ -124,13 +127,25 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         public void Clear()
         {
-            SendCustomNetworkEvent(NetworkEventTarget.All, nameof(ClearAll));
-        }
-
-        public void ClearAll()
-        {
+            if (!Networking.IsOwner(gameObject))
+            {
+                SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(Clear));
+                return;
+            }
+            if (syncedPositions.Length == 0 || isDrawing)
+                return;
+            var farPosition = farPoint.position;
+            if (syncedPositions[syncedPositions.Length - 1] == farPosition)
+                syncedPositions[syncedPositions.Length - 1] += Vector3.up;
+            var newLength = Array.LastIndexOf(syncedPositions, farPosition);
             trailRenderer.Clear();
-            syncedPositions = new Vector3[0];
+            if (newLength > 0)
+            {
+                var newPositions = new Vector3[newLength];
+                Array.Copy(syncedPositions, newPositions, newLength);
+                trailRenderer.AddPositions(newPositions);
+            }
+            SendData();
         }
     }
 }
