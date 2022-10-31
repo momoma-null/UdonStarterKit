@@ -91,7 +91,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         public void OnPickupPen()
         {
-            Networking.SetOwner(Networking.LocalPlayer, gameObject);
+            if (!Networking.IsOwner(gameObject))
+                Networking.SetOwner(Networking.LocalPlayer, gameObject);
         }
 
         public void BeginUsing()
