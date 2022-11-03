@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactTextPlacement: {fileID: 0}
-  interactText: Clear
+  interactText: Undo
   interactTextGO: {fileID: 0}
   proximity: 2
   SynchronizePosition: 0
