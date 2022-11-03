@@ -40,6 +40,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             var farParent = farPoint.parent;
             farParent.SetParent(null);
             farParent.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            constraint.gameObject.SetActive(true);
         }
 
         public override void OnPlayerJoined(VRCPlayerApi player)
