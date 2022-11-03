@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ink
+  m_Name: Ink_BlueGreen
   m_Shader: {fileID: 4800000, guid: 52aa48f02738af44c9a25d248900b76a, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
