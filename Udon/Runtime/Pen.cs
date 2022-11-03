@@ -128,9 +128,20 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         public void Clear()
         {
+            SendCustomNetworkEvent(NetworkEventTarget.All, nameof(ClearAll));
+        }
+
+        public void ClearAll()
+        {
+            trailRenderer.Clear();
+            syncedPositions = new Vector3[0];
+        }
+
+        public void Undo()
+        {
             if (!Networking.IsOwner(gameObject))
             {
-                SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(Clear));
+                SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(Undo));
                 return;
             }
             if (syncedPositions.Length == 0 || isDrawing)
