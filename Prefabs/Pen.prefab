@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1179958773825147478}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0.0184}
+  m_LocalPosition: {x: 0, y: 0, z: 0.0276}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 992809734739317882}
@@ -124,7 +124,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1742028357981466875}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0552, z: 0}
+  m_LocalPosition: {x: 0, y: 0.0736, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6247235555622273046}
@@ -641,7 +641,7 @@ GameObject:
   - component: {fileID: 5402240654916231031}
   - component: {fileID: -8488371643303454910}
   - component: {fileID: 5402240654916231028}
-  - component: {fileID: 5402240654916231030}
+  - component: {fileID: 3311493904812825602}
   - component: {fileID: 5402240654916231029}
   - component: {fileID: 5402240654916231034}
   - component: {fileID: 375385440519820034}
@@ -728,8 +728,8 @@ MonoBehaviour:
   publicVariablesUnityEngineObjects:
   - {fileID: 5402240654392445521}
   publicVariablesSerializationDataFormat: 0
---- !u!135 &5402240654916231030
-SphereCollider:
+--- !u!136 &3311493904812825602
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -738,9 +738,10 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
   m_Radius: 0.0184
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Height: 0.092
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.0276, z: 0}
 --- !u!54 &5402240654916231029
 Rigidbody:
   m_ObjectHideFlags: 0
