@@ -13,6 +13,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
         [SerializeField]
         Transform _seatPosition = null;
         [SerializeField]
+        Transform _seatPositionTarget = null;
+        [SerializeField]
         bool _disabledWhenVR = true;
 
         VRCPlayerApi _seatedPlayer;
@@ -41,14 +43,15 @@ namespace MomomaAssets.UdonStarterKit.Udon
             var rightLowerLegPos = inverseRot * _seatedPlayer.GetBonePosition(HumanBodyBones.RightLowerLeg);
             var height = (Mathf.Min(leftLowerLegPos.y, rightLowerLegPos.y) - playerPos.y) * -0.9f;
             var depth = (Mathf.Min(leftLowerLegPos.z, rightLowerLegPos.z) - playerPos.z) * -0.9f;
-            _seatPosition.localPosition = new Vector3(0, height, depth);
+            _seatPositionTarget.localPosition = new Vector3(0, height, depth);
         }
 
         public override void OnStationEntered(VRCPlayerApi player)
         {
             _seatedPlayer = player;
-            _seatPosition.localPosition = new Vector3(0f, -_seatPosition.parent.localPosition.y, 0f);
-            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 0.01f);
+            UpdateSeatPosition();
+            _seatPosition.localPosition = _seatPositionTarget.localPosition;
+            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 0.1f);
             SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 0.5f);
             SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 1f);
             SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 1.5f);
@@ -60,6 +63,12 @@ namespace MomomaAssets.UdonStarterKit.Udon
             _seatedPlayer = null;
         }
 
+        public override void OnPlayerJoined(VRCPlayerApi player)
+        {
+            if (player == _seatedPlayer)
+                OnStationEntered(player);
+        }
+
 #if !COMPILER_UDONSHARP && UNITY_EDITOR
         static class Styles
         {
@@ -68,7 +77,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         void OnDrawGizmosSelected()
         {
-            var kneesTransform = _seatPosition.parent;
+            var kneesTransform = _seatPositionTarget.parent;
             var position = kneesTransform.position;
             Gizmos.DrawLine(position + kneesTransform.right * 0.2f, position - kneesTransform.right * 0.2f);
             Handles.Label(position, Styles.kneeText);

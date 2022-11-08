@@ -251,7 +251,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 2937117652340664530}
-  _seatPosition: {fileID: 740595330819515111}
+  _seatPosition: {fileID: 1116317886414314030}
+  _seatPositionTarget: {fileID: 740595330819515111}
   _disabledWhenVR: 1
 --- !u!135 &6370385040534375216
 SphereCollider:
