@@ -150,7 +150,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             var farPosition = farPoint.position;
             if (syncedPositions[syncedPositions.Length - 1] == farPosition)
                 syncedPositions[syncedPositions.Length - 1] += Vector3.up;
-            var newLength = Array.LastIndexOf(syncedPositions, farPosition);
+            var newLength = Array.LastIndexOf(syncedPositions, farPosition) + 1;
             trailRenderer.Clear();
             if (newLength > 0)
             {
