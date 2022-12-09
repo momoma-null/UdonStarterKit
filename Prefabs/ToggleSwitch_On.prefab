@@ -10029,6 +10029,7 @@ MonoBehaviour:
   _isOn: 1
   _useSync: 0
   _switchAudio: {fileID: 8300000, guid: 1cb730916e3b07849b3eeea75a80aa15, type: 3}
+  _switchOffAudio: {fileID: 8300000, guid: e6ef63d9d8909064e94ebea3337a14c0, type: 3}
   _switchColor:
     serializedVersion: 2
     key0: {r: 0.05, g: 0.05, b: 0.05, a: 1}

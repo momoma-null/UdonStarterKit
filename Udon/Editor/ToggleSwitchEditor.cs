@@ -102,6 +102,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
         SerializedProperty _isOnProperty;
         SerializedProperty _useSyncProperty;
         SerializedProperty _switchAudioProperty;
+        SerializedProperty _switchOffAudioProperty;
         SerializedProperty _switchColorProperty;
         SerializedProperty m_SpriteProperty;
         SerializedProperty _toggleAnimatorProperty;
@@ -119,6 +120,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             _isOnProperty = serializedObject.FindProperty("_isOn");
             _useSyncProperty = serializedObject.FindProperty("_useSync");
             _switchAudioProperty = serializedObject.FindProperty("_switchAudio");
+            _switchOffAudioProperty = serializedObject.FindProperty("_switchOffAudio");
             _switchColorProperty = serializedObject.FindProperty("_switchColor");
             _toggleAnimatorProperty = serializedObject.FindProperty("_toggleAnimator");
             _toggleObjectsProperty = serializedObject.FindProperty("_toggleObjects");
@@ -145,6 +147,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             _isOnProperty = null;
             _useSyncProperty = null;
             _switchAudioProperty = null;
+            _switchOffAudioProperty = null;
             _switchColorProperty = null;
             m_SpriteProperty = null;
             _toggleAnimatorProperty = null;
@@ -183,6 +186,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
             }
             EditorGUILayout.PropertyField(_useSyncProperty);
             EditorGUILayout.PropertyField(_switchAudioProperty);
+            EditorGUILayout.PropertyField(_switchOffAudioProperty);
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(_switchColorProperty);
             if (EditorGUI.EndChangeCheck())

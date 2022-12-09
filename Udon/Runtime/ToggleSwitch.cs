@@ -18,6 +18,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
         [SerializeField]
         AudioClip _switchAudio = null;
         [SerializeField]
+        AudioClip _switchOffAudio = null;
+        [SerializeField]
         Gradient _switchColor = new Gradient();
         [SerializeField]
         Animator _toggleAnimator = null;
@@ -115,8 +117,13 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         void Apply()
         {
-            if (_audioSource != null && _switchAudio != null)
-                _audioSource.PlayOneShot(_switchAudio);
+            if (_audioSource != null)
+            {
+                if (_switchAudio != null && (_switchOffAudio == null || _isOn))
+                    _audioSource.PlayOneShot(_switchAudio);
+                else if (_switchOffAudio != null)
+                    _audioSource.PlayOneShot(_switchOffAudio);
+            }
             if (_animator != null)
             {
                 _animator.SetBool(k_toggleParameterName, _isOn);
