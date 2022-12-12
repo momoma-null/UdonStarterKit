@@ -2,6 +2,7 @@
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Animations;
+using VRC.SDKBase;
 
 namespace MomomaAssets.UdonStarterKit.Udon
 {
@@ -16,6 +17,12 @@ namespace MomomaAssets.UdonStarterKit.Udon
         Transform anchor;
         [SerializeField]
         float offset = 0.05f;
+
+        public override void OnOwnershipTransferred(VRCPlayerApi player)
+        {
+            if (!player.isLocal)
+                constraint.constraintActive = false;
+        }
 
         public override void OnPickup()
         {
