@@ -1,6 +1,8 @@
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
+using VRC.Udon.Common.Enums;
 #if !COMPILER_UDONSHARP && UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -13,11 +15,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
         [SerializeField]
         Transform _seatPosition = null;
         [SerializeField]
-        Transform _seatPositionTarget = null;
-        [SerializeField]
         bool _disabledWhenVR = true;
 
         VRCPlayerApi _seatedPlayer;
+        int count;
 
         void Start()
         {
@@ -37,30 +38,29 @@ namespace MomomaAssets.UdonStarterKit.Udon
         {
             if (_seatedPlayer == null)
                 return;
-            var inverseRot = Quaternion.Inverse(_seatedPlayer.GetRotation());
-            var playerPos = inverseRot * _seatedPlayer.GetPosition();
-            var leftLowerLegPos = inverseRot * _seatedPlayer.GetBonePosition(HumanBodyBones.LeftLowerLeg);
-            var rightLowerLegPos = inverseRot * _seatedPlayer.GetBonePosition(HumanBodyBones.RightLowerLeg);
-            var height = (Mathf.Min(leftLowerLegPos.y, rightLowerLegPos.y) - playerPos.y) * -0.9f;
-            var depth = (Mathf.Min(leftLowerLegPos.z, rightLowerLegPos.z) - playerPos.z) * -0.9f;
-            _seatPositionTarget.localPosition = new Vector3(0, height, depth);
+            var localMatrix = _seatPosition.worldToLocalMatrix;
+            var leftLowerLegPos = localMatrix.MultiplyPoint3x4(_seatedPlayer.GetBonePosition(HumanBodyBones.LeftLowerLeg));
+            var leftUpperLegPos = localMatrix.MultiplyPoint3x4(_seatedPlayer.GetBonePosition(HumanBodyBones.LeftUpperLeg));
+            var rightLowerLegPos = localMatrix.MultiplyPoint3x4(_seatedPlayer.GetBonePosition(HumanBodyBones.RightLowerLeg));
+            var upperLegRadius = Vector3.Distance(leftLowerLegPos, leftUpperLegPos) * 0.1f;
+            var height = -Mathf.Min(leftLowerLegPos.y, rightLowerLegPos.y) + upperLegRadius;
+            var depth = -Mathf.Min(leftLowerLegPos.z, rightLowerLegPos.z) + upperLegRadius;
+            _seatPosition.localPosition = new Vector3(0, height, depth);
+            if (++count < 150)
+                SendCustomEventDelayedFrames(nameof(UpdateSeatPosition), 1, EventTiming.LateUpdate);
         }
 
         public override void OnStationEntered(VRCPlayerApi player)
         {
             _seatedPlayer = player;
+            count = 0;
             UpdateSeatPosition();
-            _seatPosition.localPosition = _seatPositionTarget.localPosition;
-            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 0.1f);
-            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 0.5f);
-            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 1f);
-            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 1.5f);
-            SendCustomEventDelayedSeconds(nameof(UpdateSeatPosition), 2f);
         }
 
         public override void OnStationExited(VRCPlayerApi player)
         {
             _seatedPlayer = null;
+            count = 0;
         }
 
         public override void OnPlayerJoined(VRCPlayerApi player)
@@ -77,7 +77,7 @@ namespace MomomaAssets.UdonStarterKit.Udon
 
         void OnDrawGizmosSelected()
         {
-            var kneesTransform = _seatPositionTarget.parent;
+            var kneesTransform = _seatPosition.parent;
             var position = kneesTransform.position;
             Gizmos.DrawLine(position + kneesTransform.right * 0.2f, position - kneesTransform.right * 0.2f);
             Handles.Label(position, Styles.kneeText);
