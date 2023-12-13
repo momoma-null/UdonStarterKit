@@ -21,6 +21,8 @@ namespace MomomaAssets.UdonStarterKit.Udon
         Transform farPoint;
         [SerializeField]
         Transform penPoint;
+        [SerializeField]
+        GameObject desktopKey;
 
         [UdonSynced]
         Vector3[] syncedPositions = new Vector3[0];
@@ -117,6 +119,14 @@ namespace MomomaAssets.UdonStarterKit.Udon
         {
             if (!Networking.IsOwner(gameObject))
                 Networking.SetOwner(Networking.LocalPlayer, gameObject);
+            if (!Networking.LocalPlayer.IsUserInVR())
+                desktopKey.SetActive(true);
+        }
+
+        public void OnDropPen()
+        {
+            if (!Networking.LocalPlayer.IsUserInVR())
+                desktopKey.SetActive(false);
         }
 
         public void BeginUsing()

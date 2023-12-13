@@ -287,6 +287,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 65
       objectReference: {fileID: 0}
+    - target: {fileID: 3451118302482216456, guid: cddd10a0faa78a44898cf1fc4f775d50,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cddd10a0faa78a44898cf1fc4f775d50, type: 3}
 --- !u!1001 &775218758
@@ -777,6 +782,35 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8488371643303454910, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: -8488371643303454910, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+    - target: {fileID: -2979462373519278981, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: -2979462373519278981, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+    - target: {fileID: 656896635258735163, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 738478617839949733, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 738478617839949733, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+    - target: {fileID: 3587348096596341304, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3587348096596341304, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
     - target: {fileID: 5402240654459587846, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
         type: 3}
       propertyPath: m_RootOrder
@@ -836,6 +870,23 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pen
+      objectReference: {fileID: 0}
+    - target: {fileID: 5424624468126611649, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 5424624468126611649, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+    - target: {fileID: 7605545652059179708, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 7605545652059179708, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+    - target: {fileID: 8051887329948357299, guid: 8e2ee61ab10812e42b966aa9a6aa0f78,
+        type: 3}
+      propertyPath: _syncMethod
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e2ee61ab10812e42b966aa9a6aa0f78, type: 3}
