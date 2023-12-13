@@ -165,6 +165,10 @@ namespace MomomaAssets.UdonStarterKit.Udon
             trailRenderer.Clear();
             localPositions = new Vector3[0];
             lastPositionCount = 0;
+            if (Networking.IsOwner(gameObject))
+            {
+                RequestSerialization();
+            }
         }
 
         public void Undo()
