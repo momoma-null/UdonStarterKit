@@ -3,7 +3,11 @@ guid: 981ed4b3d3e9f0e42afe8baef529918b
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _udonSharpBackingUdonBehaviour: {instanceID: 0}
+  - targetRigidbody: {instanceID: 0}
+  - springPrefab: {fileID: 8120379155285631026, guid: 338c4699b99074f4f9f49f44e432a2b5,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

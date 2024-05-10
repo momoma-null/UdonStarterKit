@@ -1,39 +1,51 @@
 ﻿
 using UdonSharp;
 using UnityEngine;
-using UnityEngine.Animations;
 using VRC.SDKBase;
 
 namespace MomomaAssets.UdonStarterKit.Udon
 {
+    [RequireComponent(typeof(Rigidbody))]
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
-    public sealed class FloatingPickup : UdonSharpBehaviour
+    sealed class FloatingPickup : UdonSharpBehaviour
     {
         [SerializeField]
-        PositionConstraint constraint;
+        Rigidbody targetRigidbody;
         [SerializeField]
-        Transform puller;
+        float forceOnDrop = -50f;
         [SerializeField]
-        Transform anchor;
-        [SerializeField]
-        float offset = 0.05f;
+        Joint springPrefab;
+
+        Joint spring;
+
+        void Start()
+        {
+            spring = Instantiate(springPrefab.gameObject).GetComponent<Joint>();
+        }
 
         public override void OnOwnershipTransferred(VRCPlayerApi player)
         {
             if (!player.isLocal)
-                constraint.constraintActive = false;
+                spring.connectedBody = default;
         }
 
         public override void OnPickup()
         {
-            constraint.constraintActive = false;
+            spring.connectedBody = default;
         }
 
         public override void OnDrop()
         {
-            puller.position += Vector3.down * offset;
-            anchor.position = constraint.transform.position;
-            constraint.constraintActive = true;
+            targetRigidbody.AddForce(0f, forceOnDrop, 0f, ForceMode.Acceleration);
+            spring.transform.position = transform.position;
+            spring.connectedBody = targetRigidbody;
         }
+
+#if !COMPILER_UDONSHARP && UNITY_EDITOR
+        void Reset()
+        {
+            targetRigidbody = GetComponent<Rigidbody>();
+        }
+#endif
     }
 }
