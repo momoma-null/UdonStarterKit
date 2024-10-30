@@ -8,5 +8,8 @@
     "url": "https://github.com/momoma-null/UdonStarterKit.git",
     "type": "git"
   },
+  "author": {
+    "name": "momoma"
+  },
   "type": "sample"
 }
